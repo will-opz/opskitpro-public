@@ -12,22 +12,24 @@
 OpsKitPro 使用的是 Next.js (App Router)，通过 `@cloudflare/next-on-pages` 可以完美适配。
 
 ### 步骤：
+
 1.  进入 **Workers & Pages** -> **Create application** -> **Pages** -> **Connect to Git**。
 2.  选择你的仓库。
 3.  **构建设置 (Build Settings)**：
-    -   **Framework preset**: `Next.js`
-    -   **Build command**: `npm run build`
-    -   **Output directory**: `.vercel/output/static` (取决于配置，通常 CF 会自动识别)。
+    - **Framework preset**: `Next.js`
+    - **Build command**: `npm run build`
+    - **Output directory**: `.vercel/output/static` (取决于配置，通常 CF 会自动识别)。
 4.  **环境变量 (Environmental Variables)**：
-    -   `NODE_VERSION`: `18` 或更高。
+    - `NODE_VERSION`: `18` 或更高。
 
 ## 🥉 3. 边缘运行时配置 (Edge Runtime)
 
 项目中所有诊断 API 已配置为 `export const runtime = 'edge'`，这使其能够自动运行在 Cloudflare Workers 的 V8 隔离环境中。
 
 ### 关键优化：
--   **DoH 查询**：API 内部使用 `https://cloudflare-dns.com/dns-query`，无需额外库支持。
--   **SSL 探测**：通过公共 API 或边缘 Node 模拟实现，避免了 Edge Runtime 对 `tls` 模块的限制。
+
+- **DoH 查询**：API 内部使用 `https://cloudflare-dns.com/dns-query`，无需额外库支持。
+- **SSL 探测**：通过公共 API 或边缘 Node 模拟实现，避免了 Edge Runtime 对 `tls` 模块的限制。
 
 ## 🧩 4. 绑定自定义域名 (SEO 关键)
 
@@ -37,6 +39,7 @@ OpsKitPro 使用的是 Next.js (App Router)，通过 `@cloudflare/next-on-pages`
 ## 🧱 5. 持续集成 (CI/CD)
 
 每次你向 GitHub 推送代码：
+
 1.  Cloudflare Pages 会自动触发构建。
 2.  边缘函数（API Routes）会同步更新。
 3.  **Obsidian 同步**：你可以将 Obsidian 库作为 Git Submodule，或者直接将 `kb/` 目录源码纳入主库，实现“笔记即文章”的自动发布。

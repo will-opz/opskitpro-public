@@ -14,7 +14,16 @@ const config: QuartzConfig = {
     analytics: null,
     locale: "zh-CN",
     baseUrl: "kb.opskitpro.com",
-    ignorePatterns: ["private", "templates", ".obsidian", "content/01_Notes", "content/04_Templates", "content/opskitpro-check-123.md", "content/.obsidian-vault-marker", ".DS_Store"],
+    ignorePatterns: [
+      "private",
+      "templates",
+      ".obsidian",
+      "content/01_Notes",
+      "content/04_Templates",
+      "content/opskitpro-check-123.md",
+      "content/.obsidian-vault-marker",
+      ".DS_Store",
+    ],
     defaultDateType: "created",
     theme: {
       fontOrigin: "googleFonts",

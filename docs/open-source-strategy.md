@@ -22,12 +22,14 @@
 ### 方案 A: 两仓库
 
 **public repo**
+
 - Quartz 站点
 - 已发布文章
 - 工具说明
 - 公开资源
 
 **private repo**
+
 - Obsidian 原始 vault
 - Inbox
 - 个人草稿
@@ -90,6 +92,7 @@ canonical: "https://kb.opskitpro.com/..."
 ```
 
 推荐约定：
+
 - `published: true` 表示已发布
 - `draft: true` 表示草稿，不应公开
 - `series` 用于系列聚合
@@ -98,28 +101,36 @@ canonical: "https://kb.opskitpro.com/..."
 ## 文章分层建议
 
 ### 1. 项目总览
+
 适合放：
+
 - 项目背景
 - 为什么要做这个站
 - 设计原则
 - 工程收口
 
 ### 2. 模块文章
+
 适合放：
+
 - website-check
 - IP / DNS
 - services standardization
 - Cloudflare Workers 配置
 
 ### 3. 工具文章
+
 适合放：
+
 - passgen
 - qrgen
 - json
 - websocket
 
 ### 4. 公开工具手册
+
 适合放：
+
 - 入口说明
 - 使用方法
 - 常见问题
@@ -136,6 +147,7 @@ canonical: "https://kb.opskitpro.com/..."
 ## 公开边界建议
 
 建议公开：
+
 - 已发布文章
 - 工具说明
 - 架构图
@@ -143,6 +155,7 @@ canonical: "https://kb.opskitpro.com/..."
 - 已清理过的案例复盘
 
 不建议公开：
+
 - 原始 Inbox
 - 带环境敏感信息的排障记录
 - 未整理的草稿
@@ -166,4 +179,3 @@ canonical: "https://kb.opskitpro.com/..."
   - 内部追踪
 
 这样既能公开可复用的内容，又不会把原始工作笔记全部暴露出去。
-

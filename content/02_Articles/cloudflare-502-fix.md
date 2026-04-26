@@ -8,9 +8,11 @@ date: "2026-03-20"
 # Cloudflare 502 错误怎么解决（完整指南）
 
 ## 一、问题描述
+
 用户访问网站时看到 Cloudflare 提供的 502 Bad Gateway 报错页面。
 
 ## 二、常见原因
+
 - 源站（Origin）Web 服务（Nginx/Apache）未启动。
 - 源站服务器出口防火墙屏蔽了 Cloudflare 的 IP 段。
 - 请求超时（Upstream Timeout）。
@@ -18,9 +20,11 @@ date: "2026-03-20"
 ## 三、解决方法
 
 ### 方法1：检查源站状态
+
 `systemctl status nginx`
 
 ### 方法2：放行 CF IP
+
 确保安全组允许来自 Cloudflare IP 的 80/443 入站。
 
 ## 四、快速检测
