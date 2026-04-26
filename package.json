@@ -13,8 +13,8 @@
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
-    "deploy": "npx quartz build && wrangler pages deploy",
-    "docs": "npx quartz build --serve -d docs",
+    "deploy": "npx quartz build -d content && wrangler pages deployment create public --project-name kb-opskitpro-com --branch main --commit-dirty",
+    "docs": "npx quartz build --serve -d content",
     "check": "tsc --noEmit && npx prettier . --check",
     "format": "npx prettier . --write",
     "test": "tsx --test",

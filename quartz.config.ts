@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "OpsKitPro | 运维取证智库",
+    pageTitle: "OpsKitPro | 工具与技术笔记",
     enableSPA: true,
     enablePopovers: true,
     analytics: null,

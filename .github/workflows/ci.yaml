@@ -45,7 +45,7 @@ jobs:
         run: npm test
 
       - name: Ensure Quartz builds, check bundle info
-        run: npx quartz build --bundleInfo -d docs
+        run: npx quartz build --bundleInfo -d content
 
   publish-tag:
     if: ${{ github.repository == 'will-opz/opskitpro-public' && github.ref == 'refs/heads/main' }}

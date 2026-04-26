@@ -26,7 +26,7 @@
 npm ci
 npm run check
 npm test
-npx quartz build --serve -d docs
+npx quartz build --serve -d content
 ```
 
 ## 发布流程

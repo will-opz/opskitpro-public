@@ -1,8 +1,8 @@
 ---
-title: "OpsKitPro | 运维取证智库"
+title: "OpsKitPro | 工具与技术笔记"
 ---
 
-# 🛰️ OpsKitPro 运维取证智库
+# 🛰️ OpsKitPro 工具与技术笔记
 
 这里汇总了 OpsKitPro 对外公开的文章、工具说明与展示资源。
 
