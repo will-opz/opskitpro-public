@@ -1,0 +1,92 @@
+name: Deploy KB to Lightsail
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: kb-lightsail
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  deploy:
+    name: Build and deploy kb.opskitpro.com
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Quartz
+        run: npx quartz build -d content
+
+      - name: Configure SSH
+        env:
+          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          LIGHTSAIL_SSH_KEY: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+        run: |
+          test -n "$LIGHTSAIL_HOST"
+          test -n "$LIGHTSAIL_SSH_KEY"
+          mkdir -p ~/.ssh
+          install -m 600 /dev/null ~/.ssh/kb_lightsail
+          printf '%s\n' "$LIGHTSAIL_SSH_KEY" > ~/.ssh/kb_lightsail
+          ssh-keyscan -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload build
+        env:
+          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
+        run: |
+          ssh -i ~/.ssh/kb_lightsail "${LIGHTSAIL_USER:-ec2-user}@${LIGHTSAIL_HOST}" \
+            "sudo mkdir -p /var/www/kb.opskitpro.com/releases/${GITHUB_SHA} && \
+             sudo chown -R ${LIGHTSAIL_USER:-ec2-user}:${LIGHTSAIL_USER:-ec2-user} /var/www/kb.opskitpro.com/releases/${GITHUB_SHA}"
+          rsync -az --delete -e "ssh -i ~/.ssh/kb_lightsail" \
+            public/ \
+            "${LIGHTSAIL_USER:-ec2-user}@${LIGHTSAIL_HOST}:/var/www/kb.opskitpro.com/releases/${GITHUB_SHA}/"
+
+      - name: Activate release
+        env:
+          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
+        run: |
+          ssh -i ~/.ssh/kb_lightsail "${LIGHTSAIL_USER:-ec2-user}@${LIGHTSAIL_HOST}" "
+            set -euo pipefail
+            sudo chown -R nginx:nginx /var/www/kb.opskitpro.com/releases/${GITHUB_SHA} 2>/dev/null || true
+            sudo ln -sfn /var/www/kb.opskitpro.com/releases/${GITHUB_SHA} /var/www/kb.opskitpro.com/current
+            echo 'Active KB release: ${GITHUB_SHA}'
+          "
+
+      - name: Prune old releases
+        env:
+          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
+          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
+        run: |
+          ssh -i ~/.ssh/kb_lightsail "${LIGHTSAIL_USER:-ec2-user}@${LIGHTSAIL_HOST}" "
+            set -euo pipefail
+            releases_dir=/var/www/kb.opskitpro.com/releases
+            current=\$(readlink /var/www/kb.opskitpro.com/current || true)
+            ls -1dt \"\$releases_dir\"/*/ 2>/dev/null | tail -n +6 | while read old; do
+              old=\${old%/}
+              if [ \"\$old\" != \"\$current\" ]; then
+                sudo rm -rf \"\$old\"
+                echo \"Removed: \$old\"
+              fi
+            done
+          "
