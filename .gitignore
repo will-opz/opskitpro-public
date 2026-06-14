@@ -4,3 +4,6 @@ public/
 quartz/.quartz-cache/
 *.tsbuildinfo
 .wrangler/
+
+# private cross-repository AI memory lives in opskitpro-ops/.ai
+.ai/
