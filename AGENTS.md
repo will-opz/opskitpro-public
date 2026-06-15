@@ -10,3 +10,14 @@
 This repository is public. Only publish reviewed, public-safe knowledge base content here.
 
 Do not commit private notes, analytics, credentials, drafts, publishing strategy, or `.ai/` memory into this repository.
+
+
+## Dry-Run Rule
+
+Any command or script that writes data, sends notifications, deletes files, moves files, changes symlinks, modifies infrastructure, restarts services, deploys releases, or calls external side-effect APIs should support `--dry-run`.
+
+Dry-run mode should validate inputs, compute the planned actions, and print what would happen without making changes.
+
+For AWS CLI commands, preserve the upstream flag spelling when needed. For example, `aws s3 sync` uses `--dryrun`, not `--dry-run`.
+
+For every non-trivial command added or modified, the Implementation Plan must state whether dry-run support is required.
